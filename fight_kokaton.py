@@ -165,6 +165,7 @@ def main():
     bombs=[]
     for  i in range(NUM_OF_BOMBS):
         bombs.append(Bomb((255, 0, 0), 10))
+    beams=[]
     beam = None  # ゲーム初期化時にはビームは存在しない
     clock = pg.time.Clock()
     tmr = 0
@@ -174,7 +175,8 @@ def main():
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 # スペースキー押下でBeamクラスのインスタンス生成
-                beam = Beam(bird)            
+                beam = Beam(bird)   
+                beams.append(beam)         
         screen.blit(bg_img, [0, 0])
         
         for bomb in bombs:
@@ -189,18 +191,23 @@ def main():
                 return
         
         for i,bomb in enumerate(bombs):
-            if beam is not None:
-                if beam.rct.colliderect(bomb.rct):
-                    beam=None
-                    bombs[i]=None
-                    bird.change_img(6, screen)
-                    count+=1
+            for j,beam in enumerate(beams):
+                if beam is not None:
+                    if beam.rct.colliderect(bomb.rct):
+                        beams[j]=None
+                        bombs[i]=None
+                        bird.change_img(6, screen)
+                        count+=1
         bombs= [bomb for bomb in bombs if bomb is not None]
+        beams= [beam for beam in beams if beam is not None]
+        for i in beams:
+            if WIDTH<i.rct.left:
+                beams.remove(i)
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         score.update(screen,count)
-        if beam is not None:
+        for beam in beams:
             beam.update(screen)   
         for bomb in bombs:
             bomb.update(screen)
