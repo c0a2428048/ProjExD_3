@@ -197,11 +197,11 @@ def main():
                         beams[j]=None
                         bombs[i]=None
                         bird.change_img(6, screen)
-                        count+=1
+                        count+=1 
         bombs= [bomb for bomb in bombs if bomb is not None]
         beams= [beam for beam in beams if beam is not None]
         for i in beams:
-            if WIDTH<i.rct.left:
+            if check_bound(i.rct) != (True,True):
                 beams.remove(i)
 
         key_lst = pg.key.get_pressed()
