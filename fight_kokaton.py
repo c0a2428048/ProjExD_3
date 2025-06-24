@@ -111,7 +111,7 @@ class Beam:
 
 
 class Score:
-    def __init__(self, count: int,):
+    def __init__(self, count: int):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.img = self.fonto.render("スコア:"+str(count), 0, (0, 0, 255))
         self.rct = self.img.get_rect()
@@ -122,6 +122,29 @@ class Score:
         self.rct = self.img.get_rect()
         self.rct.center = (100,600)
         screen.blit(self.img, self.rct)
+
+
+# class Explosion:
+#     def __init__(self, bomb:"Bomb"):
+#         self.img = pg.image.load("fig/explosion.gif")
+#         self.img2 = pg.image.load("fig/beam.png")
+#         self.lst=[self.img,self.img2]
+#         self.place=bomb.rct.center
+#         self.life=60
+    
+#     def update(self, screen: pg.Surface):
+#         self.lst2=[int(x) for x in list(str(self.life))]
+#         if self.lst2[0]%2==0:
+#             i=0
+#         else:
+#             i=1
+#         self.life-=1
+#         if self.life>0:
+#             self.rct=self.lst[i].get_rect()
+#             self.rct.center=self.place
+#             screen.blit(self.lst[i], self.rct)
+        
+
 
 
 class Bomb:
@@ -162,6 +185,7 @@ def main():
     bird = Bird((300, 200))
     count=0
     score = Score(count)
+    # exps=[]
     bombs=[]
     for  i in range(NUM_OF_BOMBS):
         bombs.append(Bomb((255, 0, 0), 10))
@@ -197,6 +221,8 @@ def main():
                         beams[j]=None
                         bombs[i]=None
                         bird.change_img(6, screen)
+                        # explosion=Explosion(bomb)
+                        # exps.append(explosion)
                         count+=1
         bombs= [bomb for bomb in bombs if bomb is not None]
         beams= [beam for beam in beams if beam is not None]
@@ -211,6 +237,8 @@ def main():
             beam.update(screen)   
         for bomb in bombs:
             bomb.update(screen)
+        # for exp in exps:
+        #     exp.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
